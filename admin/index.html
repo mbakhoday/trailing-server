@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>پنل مدیریت تریلینگ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --bg-main: #020617;
+      --bg-soft: #020617;
+      --border-soft: rgba(148, 163, 184, 0.35);
+      --accent: #4f46e5;
+      --accent-soft: rgba(79, 70, 229, 0.18);
+    }
+
+    body {
+      background: radial-gradient(circle at top, #0b1120 0, #020617 55%, #020617 100%);
+      color: #e5e7eb;
+      font-family: system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    .card {
+      background: rgba(2, 6, 23, 0.95);
+      border-radius: 18px;
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.95);
+    }
+
+    .card-flat {
+      background: rgba(15,23,42,0.95);
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.65);
+    }
+
+    .header-title {
+      font-weight: 600;
+      font-size: 1.25rem;
+      letter-spacing: 0.03em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .header-title::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #4f46e5, transparent);
+      box-shadow: 0 0 16px rgba(79,70,229,0.8);
+    }
+
+    .sub-text {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .badge-status {
+      font-size: 0.72rem;
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid rgba(148,163,184,0.4);
+    }
+
+    .badge-status-on {
+      background: rgba(34, 197, 94, 0.12);
+      color: #4ade80;
+      border-color: rgba(34,197,94,0.65);
+    }
+    .badge-status-off {
+      background: rgba(239,68,68,0.12);
+      color: #fca5a5;
+      border-color: rgba(239,68,68,0.65);
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-left: 6px;
+      box-shadow: 0 0 10px rgba(15,23,42,0.7);
+    }
+
+    .pill-on {
+      background: rgba(34, 197, 94, 0.12);
+      color: #4ade80;
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 0.75rem;
+    }
+    .pill-off {
+      background: rgba(248, 113, 113, 0.14);
+      color: #fca5a5;
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 0.75rem;
+    }
+
+    .table-dark-custom {
+      --bs-table-bg: transparent;
+      --bs-table-striped-bg: rgba(15,23,42,0.9);
+      --bs-table-striped-color: #e5e7eb;
+      --bs-table-hover-bg: rgba(37,99,235,0.18);
+      --bs-table-hover-color: #e5e7eb;
+      color: #e5e7eb;
+    }
+
+    .table thead th {
+      border-bottom-color: rgba(148, 163, 184, 0.5);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+      background: linear-gradient(90deg, rgba(15,23,42,0.9), rgba(15,23,42,0.6));
+    }
+
+    .table tbody tr {
+      vertical-align: middle;
+    }
+
+    .stat-card {
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.45);
+      background: radial-gradient(circle at top left, rgba(30,64,175,0.4), rgba(15,23,42,0.95));
+      min-height: 74px;
+    }
+    .stat-label {
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+    }
+    .stat-value {
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+    .stat-sub {
+      font-size: 0.72rem;
+      color: #9ca3af;
+    }
+
+    .toolbar-input {
+      max-width: 260px;
+    }
+
+    .filter-select {
+      max-width: 180px;
+    }
+
+    .btn-soft {
+      border-radius: 999px;
+      font-size: 0.8rem;
+      padding-inline: 12px;
+      border-color: rgba(148,163,184,0.6);
+    }
+
+    .btn-soft-primary {
+      background: rgba(79,70,229,0.14);
+      color: #bfdbfe;
+      border-color: rgba(129,140,248,0.7);
+    }
+
+    .btn-soft-primary:hover {
+      background: rgba(79,70,229,0.25);
+      color: #e5e7eb;
+    }
+
+    .tag-muted {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .online-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-left: 6px;
+      box-shadow: 0 0 14px rgba(34,197,94,0.8);
+      background: #22c55e;
+    }
+
+    .badge-online {
+      font-size: 0.75rem;
+      border-radius: 999px;
+      padding: 2px 8px;
+      background: rgba(34,197,94,0.12);
+      color: #4ade80;
+      border: 1px solid rgba(34,197,94,0.6);
+    }
+
+    .badge-offline-soft {
+      font-size: 0.75rem;
+      border-radius: 999px;
+      padding: 2px 8px;
+      background: rgba(148,163,184,0.1);
+      color: #9ca3af;
+      border: 1px solid rgba(148,163,184,0.4);
+    }
+
+    .badge-pending {
+      font-size: 0.75rem;
+      border-radius: 999px;
+      padding: 2px 8px;
+      background: rgba(234,179,8,0.12);
+      color: #facc15;
+      border: 1px solid rgba(234,179,8,0.6);
+    }
+
+    .nav-tabs {
+      border-bottom-color: rgba(148,163,184,0.3);
+    }
+
+    .nav-tabs .nav-link {
+      border: none;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      padding: 6px 14px;
+      margin-left: 4px;
+      background: transparent;
+    }
+
+    .nav-tabs .nav-link.active {
+      color: #e5e7eb;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(79,70,229,0.6);
+      box-shadow: 0 0 20px rgba(79,70,229,0.45);
+    }
+
+    .log-type-badge {
+      font-size: 0.7rem;
+      border-radius: 999px;
+      padding: 2px 8px;
+    }
+    .log-type-connected {
+      background: rgba(34,197,94,0.15);
+      color: #4ade80;
+    }
+    .log-type-disconnected {
+      background: rgba(248,113,113,0.18);
+      color: #fecaca;
+    }
+    .log-type-status {
+      background: rgba(59,130,246,0.18);
+      color: #bfdbfe;
+    }
+
+    @media (max-width: 768px) {
+      .toolbar-input {
+        max-width: 100%;
+      }
+      .filter-select {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid py-4 px-3 px-md-4">
+    <!-- هدر بالا -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
+      <div>
+        <div class="header-title">
+          <span>پنل مدیریت تریلینگ استاپ</span>
+          <span id="globalStatusBadge" class="badge-status badge-status-off">
+            سیستم غیرفعال
+          </span>
+        </div>
+        <div class="sub-text mt-1">
+          کنترل مرکزی دسترسی کلاینت‌ها و مجوز اجرای هسته تریلینگ.
+        </div>
+      </div>
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        <span id="labelLastSync" class="tag-muted">
+          آخرین همگام‌سازی: -
+        </span>
+        <button id="btnRefresh" class="btn btn-outline-light btn-sm btn-soft">
+          بروزرسانی دستی
+        </button>
+      </div>
+    </div>
+
+    <!-- ردیف آمار کلی -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-label mb-1">کل کلاینت‌ها</div>
+          <div id="statTotal" class="stat-value">0</div>
+          <div class="stat-sub">تمام مرورگرهایی که تاکنون متصل شده‌اند</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-label mb-1">کلاینت مجاز</div>
+          <div id="statAllowed" class="stat-value text-success">0</div>
+          <div class="stat-sub">به هسته تریلینگ دسترسی دارند</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-label mb-1">کلاینت مسدود</div>
+          <div id="statBlocked" class="stat-value text-danger">0</div>
+          <div class="stat-sub">دسترسی‌شان قطع شده</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-label mb-1">کلاینت‌های فعال (آنلاین)</div>
+          <div id="statOnline" class="stat-value text-info">0</div>
+          <div class="stat-sub">اتصال در چند ثانیه‌ی اخیر</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- کارت تب‌دار -->
+    <div class="card">
+      <div class="card-body">
+        <!-- Tabs Header -->
+        <ul class="nav nav-tabs mb-3" id="clientsTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-online-tab" data-bs-toggle="tab" data-bs-target="#tab-online" type="button" role="tab" aria-controls="tab-online" aria-selected="true">
+              کلاینت‌های آنلاین
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-activity-tab" data-bs-toggle="tab" data-bs-target="#tab-activity" type="button" role="tab" aria-controls="tab-activity" aria-selected="false">
+              فعالیت اخیر
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-pending-tab" data-bs-toggle="tab" data-bs-target="#tab-pending" type="button" role="tab" aria-controls="tab-pending" aria-selected="false">
+              در انتظار تأیید
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-all-tab" data-bs-toggle="tab" data-bs-target="#tab-all" type="button" role="tab" aria-controls="tab-all" aria-selected="false">
+              همه کلاینت‌ها
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-settings-tab" data-bs-toggle="tab" data-bs-target="#tab-settings" type="button" role="tab" aria-controls="tab-settings" aria-selected="false">
+              تنظیمات سیستم
+            </button>
+          </li>
+        </ul>
+
+        <!-- Tabs Content -->
+        <div class="tab-content" id="clientsTabsContent">
+          <!-- تب آنلاین -->
+          <div class="tab-pane fade show active" id="tab-online" role="tabpanel" aria-labelledby="tab-online-tab">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+              <div class="fw-semibold d-flex align-items-center gap-2">
+                <span>کلاینت‌های فعال (آنلاین همین الان)</span>
+                <span class="tag-muted">
+                  بر اساس آخرین زمان اتصال، هر چند ثانیه بروزرسانی می‌شود.
+                </span>
+              </div>
+              <span class="tag-muted">
+                تعداد آنلاین: <span id="onlineCountLabel">0</span>
+              </span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-dark-custom table-striped table-hover align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">نام / توضیح</th>
+                    <th scope="col">Client ID</th>
+                    <th scope="col">وضعیت دسترسی</th>
+                    <th scope="col">آخرین اتصال</th>
+                    <th scope="col">مرورگر</th>
+                    <th scope="col" class="text-center">قطع / وصل</th>
+                  </tr>
+                </thead>
+                <tbody id="onlineClientsBody">
+                  <!-- با JS پر می‌شود -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- تب فعالیت اخیر -->
+          <div class="tab-pane fade" id="tab-activity" role="tabpanel" aria-labelledby="tab-activity-tab">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+              <div class="fw-semibold d-flex align-items-center gap-2">
+                <span>فعالیت‌های اخیر سیستم</span>
+                <span class="tag-muted">
+                  مشاهده اتصال‌ها، قطع اتصال‌ها و تغییر وضعیت کلاینت‌ها.
+                </span>
+              </div>
+              <span class="tag-muted">
+                حداکثر نمایش: ۱۰۰ رویداد آخر
+              </span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-dark-custom table-striped table-hover align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">زمان</th>
+                    <th scope="col">نوع رویداد</th>
+                    <th scope="col">Client ID</th>
+                    <th scope="col">نام / توضیح</th>
+                    <th scope="col">جزئیات</th>
+                  </tr>
+                </thead>
+                <tbody id="activityLogBody">
+                  <!-- با JS پر می‌شود -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- تب در انتظار تأیید -->
+          <div class="tab-pane fade" id="tab-pending" role="tabpanel" aria-labelledby="tab-pending-tab">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+              <div class="fw-semibold d-flex align-items-center gap-2">
+                <span>کلاینت‌های جدید در انتظار تأیید</span>
+                <span class="tag-muted">
+                  تا زمان تأیید، این کلاینت‌ها هیچ دسترسی به هسته تریلینگ ندارند.
+                </span>
+              </div>
+              <span class="tag-muted">
+                تعداد در انتظار: <span id="pendingCountLabel">0</span>
+              </span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-dark-custom table-striped table-hover align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">نام / توضیح</th>
+                    <th scope="col">Client ID</th>
+                    <th scope="col">آخرین اتصال</th>
+                    <th scope="col">مرورگر</th>
+                    <th scope="col" class="text-center">عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="pendingClientsBody">
+                  <!-- با JS پر می‌شود -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- تب همه کلاینت‌ها -->
+          <div class="tab-pane fade" id="tab-all" role="tabpanel" aria-labelledby="tab-all-tab">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+              <div class="fw-semibold d-flex align-items-center gap-2">
+                <span>همه کلاینت‌ها</span>
+                <span class="tag-muted">هر ردیف نماینده‌ی یک مرورگر با لودر فعال است.</span>
+              </div>
+              <div class="d-flex flex-wrap gap-2">
+                <select id="filterStatus" class="form-select form-select-sm filter-select">
+                  <option value="all">نمایش: همه وضعیت‌ها</option>
+                  <option value="allowed">فقط مجازها</option>
+                  <option value="pending">فقط در انتظار تأیید</option>
+                  <option value="blocked">فقط مسدودها</option>
+                </select>
+                <input
+                  id="searchInput"
+                  type="text"
+                  placeholder="جستجو بر اساس Client ID یا توضیح..."
+                  class="form-control form-control-sm toolbar-input"
+                />
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-dark-custom table-striped table-hover align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">Client ID</th>
+                    <th scope="col">وضعیت</th>
+                    <th scope="col">توضیح</th>
+                    <th scope="col">آخرین اتصال</th>
+                    <th scope="col">مرورگر</th>
+                    <th scope="col" class="text-center">عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="clientsTableBody">
+                  <!-- ردیف‌ها با JS پر می‌شوند -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- تب تنظیمات سیستم -->
+          <div class="tab-pane fade" id="tab-settings" role="tabpanel" aria-labelledby="tab-settings-tab">
+            <div class="mt-2">
+              <div class="fw-semibold mb-2">تنظیمات کلی سیستم تریلینگ</div>
+              <div class="sub-text mb-3">
+                این تنظیمات روی همه‌ی کلاینت‌ها اثر می‌گذارد. اگر سیستم خاموش باشد، هیچ کلاینتی حتی در صورت مجاز بودن، اسکریپت تریلینگ را دریافت نمی‌کند.
+              </div>
+              <div class="row g-3">
+                <div class="col-12 col-md-7">
+                  <div class="card-flat">
+                    <div class="card-body">
+                      <div class="d-flex flex-column gap-3">
+                        <div class="d-flex flex-column gap-1">
+                          <span class="fw-semibold">وضعیت کلی سیستم</span>
+                          <span class="sub-text">
+                            مدیریت روشن/خاموش بودن هسته تریلینگ برای همه‌ی کلاینت‌ها.
+                          </span>
+                        </div>
+                        <div class="form-check form-switch text-start">
+                          <input class="form-check-input" type="checkbox" role="switch" id="switchGlobalEnabled">
+                          <label class="form-check-label" for="switchGlobalEnabled">
+                            سیستم فعال باشد
+                          </label>
+                        </div>
+                        <hr class="border-secondary opacity-25" />
+                        <div class="d-flex flex-column gap-1">
+                          <span class="fw-semibold">رفتار کلاینت‌های جدید</span>
+                          <span class="sub-text">
+                            تعیین کنید کلاینت‌هایی که تازه متصل می‌شوند، به صورت خودکار مجاز باشند یا ابتدا در حالت «در انتظار تأیید» قرار بگیرند.
+                          </span>
+                          <div class="form-check form-switch text-start mt-2">
+                            <input class="form-check-input" type="checkbox" role="switch" id="switchDefaultAllowed">
+                            <label class="form-check-label" for="switchDefaultAllowed">
+                              کلاینت‌های جدید به صورت خودکار مجاز شوند
+                            </label>
+                          </div>
+                          <div class="sub-text mt-1">
+                            حالت فعلی: <span id="labelDefaultMode" class="fw-semibold text-info"></span>
+                          </div>
+                        </div>
+                        <div>
+                          <button id="btnSaveGlobal" class="btn btn-soft-primary btn-sm">
+                            ذخیره تنظیمات کلی
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-5">
+                  <div class="card-flat h-100">
+                    <div class="card-body">
+                      <div class="fw-semibold mb-2">وضعیت زنده سیستم</div>
+                      <ul class="sub-text mb-0" style="padding-right: 1rem;">
+                        <li>وضعیت فعلی سیستم: <span id="settingsStatusText">-</span></li>
+                        <li>حالت ورود کلاینت‌های جدید: <span id="settingsDefaultText">-</span></li>
+                        <li>آخرین همگام‌سازی: <span id="settingsLastSyncText">-</span></li>
+                      </ul>
+                      <div class="sub-text mt-3">
+                        برای اعمال سریع تغییرات می‌توانید از دکمه «بروزرسانی دستی» بالا نیز استفاده کنید.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- row -->
+            </div>
+          </div>
+        </div> <!-- tab-content -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (برای تب‌ها) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const apiBase = ''; // اگر پنل روی ساب‌دومین دیگری است، اینجا Base URL را بده
+    let clientsConfig = null;
+    const ONLINE_THRESHOLD_SEC = 15;
+    let autoRefreshTimer = null;
+
+    function formatDateTime(iso, shortMode = false) {
+      if (!iso) return '-';
+      try {
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) return iso;
+        if (shortMode) {
+          return d.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+        }
+        return d.toLocaleString('fa-IR');
+      } catch {
+        return iso;
+      }
+    }
+
+    function formatRelativeTime(iso) {
+      if (!iso) return '-';
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return iso;
+      const now = new Date();
+      const diffSec = Math.floor((now - d) / 1000);
+      if (diffSec < 5) return 'چند لحظه پیش';
+      if (diffSec < 60) return diffSec + ' ثانیه پیش';
+      const diffMin = Math.floor(diffSec / 60);
+      if (diffMin < 60) return diffMin + ' دقیقه پیش';
+      const diffHour = Math.floor(diffMin / 60);
+      if (diffHour < 24) return diffHour + ' ساعت پیش';
+      const diffDay = Math.floor(diffHour / 24);
+      return diffDay + ' روز پیش';
+    }
+
+    function getClientStatus(data) {
+      if (!data) return 'blocked';
+      if (data.status) return data.status;
+      return data.allowed === true ? 'allowed' : 'blocked';
+    }
+
+    function isClientOnline(data) {
+      if (!data || !data.lastSeen) return false;
+      const last = new Date(data.lastSeen);
+      if (isNaN(last.getTime())) return false;
+      const now = new Date();
+      const diffSec = (now - last) / 1000;
+      return diffSec <= ONLINE_THRESHOLD_SEC;
+    }
+
+    function isPendingClient(data) {
+      return getClientStatus(data) === 'pending';
+    }
+
+    function buildRow(clientId, data) {
+      const status  = getClientStatus(data);
+      const allowed = status === 'allowed';
+      const note     = data.note || '';
+      const lastSeen = data.lastSeen || '';
+      const ua       = data.userAgent || '';
+
+      const tr = document.createElement('tr');
+      tr.dataset.clientId = clientId;
+
+      if (isClientOnline(data)) {
+        tr.style.boxShadow = '0 0 0 1px rgba(34,197,94,0.25)';
+      }
+
+      const tdId = document.createElement('td');
+      tdId.style.fontFamily = 'monospace';
+      tdId.style.fontSize = '0.8rem';
+      tdId.textContent = clientId;
+      tr.appendChild(tdId);
+
+      const tdStatus = document.createElement('td');
+      const dot = document.createElement('span');
+      dot.className = 'status-dot';
+
+      if (status === 'allowed') {
+        dot.style.backgroundColor = '#22c55e';
+      } else if (status === 'pending') {
+        dot.style.backgroundColor = '#eab308';
+      } else {
+        dot.style.backgroundColor = '#ef4444';
+      }
+
+      const pill = document.createElement('span');
+      pill.className = 'ms-1';
+      if (status === 'allowed') {
+        pill.className += ' pill-on';
+        pill.textContent = 'مجاز';
+      } else if (status === 'pending') {
+        pill.className += ' badge-pending';
+        pill.textContent = 'در انتظار تأیید';
+      } else {
+        pill.className += ' pill-off';
+        pill.textContent = 'مسدود';
+      }
+
+      tdStatus.appendChild(dot);
+      tdStatus.appendChild(pill);
+      tr.appendChild(tdStatus);
+
+      const tdNote = document.createElement('td');
+      const noteInput = document.createElement('input');
+      noteInput.type = 'text';
+      noteInput.className = 'form-control form-control-sm';
+      noteInput.value = note;
+      noteInput.placeholder = 'مثلاً: سیستم خودم / لپ‌تاپ دوست';
+      noteInput.dataset.clientId = clientId;
+      tdNote.appendChild(noteInput);
+      tr.appendChild(tdNote);
+
+      const tdLast = document.createElement('td');
+      tdLast.style.fontSize = '0.8rem';
+      tdLast.textContent = formatDateTime(lastSeen);
+      tr.appendChild(tdLast);
+
+      const tdUa = document.createElement('td');
+      tdUa.style.fontSize = '0.75rem';
+      tdUa.style.maxWidth = '220px';
+      tdUa.style.whiteSpace = 'nowrap';
+      tdUa.style.overflow = 'hidden';
+      tdUa.style.textOverflow = 'ellipsis';
+      tdUa.title = ua;
+      tdUa.textContent = ua;
+      tr.appendChild(tdUa);
+
+      const tdActions = document.createElement('td');
+      tdActions.className = 'text-center';
+
+      const statusNow = getClientStatus(data);
+
+      if (statusNow === 'pending') {
+        const approveBtn = document.createElement('button');
+        approveBtn.className = 'btn btn-sm btn-success ms-1';
+        approveBtn.textContent = 'تایید و مجاز کردن';
+        approveBtn.onclick = () => setClientStatus(clientId, 'allowed');
+
+        const rejectBtn = document.createElement('button');
+        rejectBtn.className = 'btn btn-sm btn-outline-danger ms-1';
+        rejectBtn.textContent = 'رد / مسدود کردن';
+        rejectBtn.onclick = () => setClientStatus(clientId, 'blocked');
+
+        tdActions.appendChild(approveBtn);
+        tdActions.appendChild(rejectBtn);
+      } else {
+        const allowBtn = document.createElement('button');
+        allowBtn.className = 'btn btn-sm ' + (allowed ? 'btn-outline-warning' : 'btn-outline-success');
+        allowBtn.textContent = allowed ? 'مسدود کردن' : 'مجاز کردن';
+        allowBtn.onclick = () => toggleAllow(clientId, !allowed);
+
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'btn btn-sm btn-outline-light ms-2';
+        saveBtn.textContent = 'ذخیره توضیح';
+        saveBtn.onclick = () => saveNote(clientId);
+
+        tdActions.appendChild(allowBtn);
+        tdActions.appendChild(saveBtn);
+      }
+
+      tr.appendChild(tdActions);
+
+      return tr;
+    }
+
+    function updateStats() {
+      if (!clientsConfig || !clientsConfig.clients) {
+        document.getElementById('statTotal').textContent   = '0';
+        document.getElementById('statAllowed').textContent = '0';
+        document.getElementById('statBlocked').textContent = '0';
+        document.getElementById('statOnline').textContent  = '0';
+        return;
+      }
+
+      const entries = Object.entries(clientsConfig.clients);
+      const total = entries.length;
+      let allowedCount = 0;
+      let blockedCount = 0;
+      let onlineCount = 0;
+
+      for (const [id, data] of entries) {
+        const status = getClientStatus(data);
+        if (status === 'allowed') allowedCount++;
+        if (status === 'blocked') blockedCount++;
+        if (isClientOnline(data)) onlineCount++;
+      }
+
+      document.getElementById('statTotal').textContent   = total;
+      document.getElementById('statAllowed').textContent = allowedCount;
+      document.getElementById('statBlocked').textContent = blockedCount;
+      document.getElementById('statOnline').textContent  = onlineCount.toString();
+    }
+
+    function updateGlobalUI() {
+      const badge = document.getElementById('globalStatusBadge');
+      const lblDefault = document.getElementById('labelDefaultMode');
+
+      const globalEnabled   = clientsConfig?.globalEnabled !== false;
+      const defaultAllowed  = clientsConfig?.defaultAllowed === true;
+
+      if (globalEnabled) {
+        badge.textContent = 'سیستم فعال';
+        badge.classList.remove('badge-status-off');
+        badge.classList.add('badge-status-on');
+      } else {
+        badge.textContent = 'سیستم غیرفعال';
+        badge.classList.remove('badge-status-on');
+        badge.classList.add('badge-status-off');
+      }
+
+      lblDefault.textContent = defaultAllowed ? 'به‌صورت خودکار مجاز' : 'نیازمند تایید دستی';
+
+      document.getElementById('switchGlobalEnabled').checked = globalEnabled;
+      document.getElementById('switchDefaultAllowed').checked = defaultAllowed;
+
+      document.getElementById('settingsStatusText').textContent = globalEnabled ? 'فعال' : 'غیرفعال';
+      document.getElementById('settingsDefaultText').textContent = defaultAllowed
+        ? 'مجوز خودکار برای کلاینت‌های جدید'
+        : 'قرار گرفتن در صف تأیید';
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('clientsTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!clientsConfig || !clientsConfig.clients) return;
+
+      const searchValEl = document.getElementById('searchInput');
+      const filterValEl = document.getElementById('filterStatus');
+
+      const searchVal  = searchValEl ? searchValEl.value.trim().toLowerCase() : '';
+      const filterVal  = filterValEl ? filterValEl.value : 'all';
+
+      const entries = Object.entries(clientsConfig.clients)
+        .sort((a, b) => (a[0] > b[0] ? 1 : -1));
+
+      for (const [clientId, data] of entries) {
+        const status = getClientStatus(data);
+
+        if (filterVal === 'allowed' && status !== 'allowed') continue;
+        if (filterVal === 'blocked' && status !== 'blocked') continue;
+        if (filterVal === 'pending' && status !== 'pending') continue;
+
+        if (searchVal) {
+          const note = (data.note || '').toLowerCase();
+          if (
+            !clientId.toLowerCase().includes(searchVal) &&
+            !note.includes(searchVal)
+          ) {
+            continue;
+          }
+        }
+
+        const tr = buildRow(clientId, data);
+        tbody.appendChild(tr);
+      }
+    }
+
+    function renderOnlineTable() {
+      const tbody = document.getElementById('onlineClientsBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+
+      if (!clientsConfig || !clientsConfig.clients) {
+        document.getElementById('onlineCountLabel').textContent = '0';
+        return;
+      }
+
+      const entries = Object.entries(clientsConfig.clients);
+      let countOnline = 0;
+
+      for (const [clientId, data] of entries) {
+        if (!isClientOnline(data)) continue;
+
+        countOnline++;
+
+        const tr = document.createElement('tr');
+
+        const tdName = document.createElement('td');
+        const label = data.note || 'بدون نام';
+        tdName.textContent = label;
+        tr.appendChild(tdName);
+
+        const tdId = document.createElement('td');
+        tdId.style.fontFamily = 'monospace';
+        tdId.style.fontSize = '0.8rem';
+        tdId.textContent = clientId;
+        tr.appendChild(tdId);
+
+        const tdAccess = document.createElement('td');
+        const dot = document.createElement('span');
+        dot.className = 'online-dot';
+
+        const s = getClientStatus(data);
+        const badge = document.createElement('span');
+        badge.className = 'ms-1';
+        if (s === 'allowed') {
+          badge.className += ' badge-online';
+          badge.textContent = 'مجاز';
+        } else if (s === 'pending') {
+          badge.className += ' badge-pending';
+          badge.textContent = 'در انتظار تأیید';
+        } else {
+          badge.className += ' badge-offline-soft';
+          badge.textContent = 'مسدود';
+        }
+
+        tdAccess.appendChild(dot);
+        tdAccess.appendChild(badge);
+        tr.appendChild(tdAccess);
+
+        const tdLast = document.createElement('td');
+        tdLast.style.fontSize = '0.8rem';
+        tdLast.textContent = formatDateTime(data.lastSeen, true);
+        tr.appendChild(tdLast);
+
+        const tdUa = document.createElement('td');
+        const ua = data.userAgent || '';
+        tdUa.style.fontSize = '0.75rem';
+        tdUa.style.maxWidth = '220px';
+        tdUa.style.whiteSpace = 'nowrap';
+        tdUa.style.overflow = 'hidden';
+        tdUa.style.textOverflow = 'ellipsis';
+        tdUa.title = ua;
+        tdUa.textContent = ua;
+        tr.appendChild(tdUa);
+
+        const tdActions = document.createElement('td');
+        tdActions.className = 'text-center';
+
+        const allowed = getClientStatus(data) === 'allowed';
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-sm ' + (allowed ? 'btn-outline-danger' : 'btn-outline-success');
+        btn.textContent = allowed ? 'قطع دسترسی' : 'اتصال مجدد';
+
+        btn.onclick = () => toggleAllow(clientId, !allowed);
+
+        tdActions.appendChild(btn);
+        tr.appendChild(tdActions);
+
+        tbody.appendChild(tr);
+      }
+
+      document.getElementById('onlineCountLabel').textContent = countOnline.toString();
+    }
+
+    function renderPendingTable() {
+      const tbody = document.getElementById('pendingClientsBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+
+      if (!clientsConfig || !clientsConfig.clients) {
+        document.getElementById('pendingCountLabel').textContent = '0';
+        return;
+      }
+
+      const entries = Object.entries(clientsConfig.clients);
+      let pendingCount = 0;
+
+      for (const [clientId, data] of entries) {
+        if (!isPendingClient(data)) continue;
+
+        pendingCount++;
+
+        const tr = document.createElement('tr');
+
+        const tdName = document.createElement('td');
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'form-control form-control-sm';
+        input.placeholder = 'مثلاً: سیستم خودم / VPS فلان';
+        input.value = data.note || '';
+        input.dataset.clientId = clientId;
+        tdName.appendChild(input);
+        tr.appendChild(tdName);
+
+        const tdId = document.createElement('td');
+        tdId.style.fontFamily = 'monospace';
+        tdId.style.fontSize = '0.8rem';
+        tdId.textContent = clientId;
+        tr.appendChild(tdId);
+
+        const tdLast = document.createElement('td');
+        tdLast.style.fontSize = '0.8rem';
+        tdLast.textContent = formatDateTime(data.lastSeen || '', false);
+        tr.appendChild(tdLast);
+
+        const tdUa = document.createElement('td');
+        const ua = data.userAgent || '';
+        tdUa.style.fontSize = '0.75rem';
+        tdUa.style.maxWidth = '220px';
+        tdUa.style.whiteSpace = 'nowrap';
+        tdUa.style.overflow = 'hidden';
+        tdUa.style.textOverflow = 'ellipsis';
+        tdUa.title = ua;
+        tdUa.textContent = ua;
+        tr.appendChild(tdUa);
+
+        const tdActions = document.createElement('td');
+        tdActions.className = 'text-center';
+
+        const approveBtn = document.createElement('button');
+        approveBtn.className = 'btn btn-sm btn-success ms-1';
+        approveBtn.textContent = 'تایید و مجاز کردن';
+        approveBtn.onclick = () => setClientStatus(clientId, 'allowed');
+
+        const rejectBtn = document.createElement('button');
+        rejectBtn.className = 'btn btn-sm btn-outline-danger ms-1';
+        rejectBtn.textContent = 'رد / مسدود کردن';
+        rejectBtn.onclick = () => setClientStatus(clientId, 'blocked');
+
+        tdActions.appendChild(approveBtn);
+        tdActions.appendChild(rejectBtn);
+
+        tr.appendChild(tdActions);
+
+        tbody.appendChild(tr);
+      }
+
+      document.getElementById('pendingCountLabel').textContent = pendingCount.toString();
+    }
+
+    function renderActivityLog() {
+      const tbody = document.getElementById('activityLogBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const activity = (clientsConfig && Array.isArray(clientsConfig.activity))
+        ? clientsConfig.activity.slice()
+        : [];
+
+      if (!activity.length) return;
+
+      activity.sort((a, b) => {
+        const da = new Date(a.time);
+        const db = new Date(b.time);
+        return db - da; // جدیدتر اول
+      });
+
+      const sliced = activity.slice(0, 100);
+
+      for (const ev of sliced) {
+        const tr = document.createElement('tr');
+
+        const tdTime = document.createElement('td');
+        tdTime.style.fontSize = '0.8rem';
+        tdTime.textContent = formatRelativeTime(ev.time);
+        tdTime.title = formatDateTime(ev.time);
+        tr.appendChild(tdTime);
+
+        const tdType = document.createElement('td');
+        const badge = document.createElement('span');
+        badge.className = 'log-type-badge ';
+        let label = 'رویداد';
+        if (ev.type === 'connected') {
+          badge.className += 'log-type-connected';
+          label = 'اتصال';
+        } else if (ev.type === 'disconnected') {
+          badge.className += 'log-type-disconnected';
+          label = 'قطع اتصال';
+        } else if (ev.type === 'status-change') {
+          badge.className += 'log-type-status';
+          label = 'تغییر وضعیت';
+        }
+        badge.textContent = label;
+        tdType.appendChild(badge);
+        tr.appendChild(tdType);
+
+        const tdClientId = document.createElement('td');
+        tdClientId.style.fontFamily = 'monospace';
+        tdClientId.style.fontSize = '0.8rem';
+        tdClientId.textContent = ev.clientId || '-';
+        tr.appendChild(tdClientId);
+
+        const tdName = document.createElement('td');
+        const clientData = clientsConfig.clients && ev.clientId
+          ? clientsConfig.clients[ev.clientId]
+          : null;
+        const note = ev.note || (clientData && clientData.note) || '';
+        tdName.textContent = note || 'بدون نام';
+        tr.appendChild(tdName);
+
+        const tdDetail = document.createElement('td');
+        let detailText = ev.detail || '';
+        if (!detailText && ev.type === 'status-change' && ev.status) {
+          const s = ev.status;
+          if (s === 'allowed') detailText = 'وضعیت به «مجاز» تغییر کرد';
+          else if (s === 'blocked') detailText = 'وضعیت به «مسدود» تغییر کرد';
+          else if (s === 'pending') detailText = 'وضعیت به «در انتظار تأیید» تغییر کرد';
+        }
+        if (!detailText && ev.type === 'connected') detailText = 'کلاینت به سیستم متصل شد';
+        if (!detailText && ev.type === 'disconnected') detailText = 'کلاینت از سیستم جدا شد';
+        tdDetail.textContent = detailText || '-';
+        tr.appendChild(tdDetail);
+
+        tbody.appendChild(tr);
+      }
+    }
+
+    async function loadConfig() {
+      try {
+        const res = await fetch(apiBase + '/api/admin/clients');
+        if (!res.ok) {
+          alert('خطا در گرفتن تنظیمات از سرور');
+          return;
+        }
+        clientsConfig = await res.json();
+
+        updateGlobalUI();
+        updateStats();
+        renderTable();
+        renderOnlineTable();
+        renderPendingTable();
+        renderActivityLog();
+
+        const nowIso = new Date().toISOString();
+        document.getElementById('labelLastSync').textContent =
+          'آخرین همگام‌سازی: ' + formatDateTime(nowIso);
+        document.getElementById('settingsLastSyncText').textContent =
+          formatDateTime(nowIso, true);
+      } catch (e) {
+        console.error(e);
+        alert('خطا در ارتباط با سرور');
+      }
+    }
+
+    async function saveGlobal() {
+      const globalEnabled  = document.getElementById('switchGlobalEnabled').checked;
+      const defaultAllowed = document.getElementById('switchDefaultAllowed').checked;
+
+      try {
+        const res = await fetch(apiBase + '/api/admin/global', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ globalEnabled, defaultAllowed })
+        });
+        if (!res.ok) {
+          alert('خطا در ذخیره تنظیمات کلی');
+          return;
+        }
+        await loadConfig();
+      } catch (e) {
+        console.error(e);
+        alert('خطا در ارتباط با سرور (global)');
+      }
+    }
+
+    async function setClientStatus(clientId, newStatus) {
+      const noteInput = document.querySelector(`input[data-client-id="${clientId}"]`);
+      const currentData = clientsConfig.clients[clientId] || {};
+      const note = noteInput ? noteInput.value : (currentData.note || '');
+      const allowed = newStatus === 'allowed';
+
+      try {
+        const res = await fetch(apiBase + '/api/admin/set-client', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ clientId, status: newStatus, allowed, note })
+        });
+        if (!res.ok) {
+          alert('خطا در بروزرسانی وضعیت این کلاینت');
+          return;
+        }
+        await loadConfig();
+      } catch (e) {
+        console.error(e);
+        alert('خطا در ارتباط با سرور (set-client-status)');
+      }
+    }
+
+    function toggleAllow(clientId, allowed) {
+      setClientStatus(clientId, allowed ? 'allowed' : 'blocked');
+    }
+
+    async function saveNote(clientId) {
+      const noteInput = document.querySelector(`input[data-client-id="${clientId}"]`);
+      if (!noteInput) return;
+      const note = noteInput.value;
+
+      const currentData = clientsConfig.clients[clientId] || {};
+      const currentStatus = getClientStatus(currentData);
+      const allowed = currentStatus === 'allowed';
+
+      try {
+        const res = await fetch(apiBase + '/api/admin/set-client', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ clientId, status: currentStatus, allowed, note })
+        });
+        if (!res.ok) {
+          alert('خطا در ذخیره توضیح');
+          return;
+        }
+        await loadConfig();
+      } catch (e) {
+        console.error(e);
+        alert('خطا در ارتباط با سرور (save-note)');
+      }
+    }
+
+    document.getElementById('btnRefresh').addEventListener('click', loadConfig);
+    document.getElementById('btnSaveGlobal').addEventListener('click', saveGlobal);
+    const searchEl = document.getElementById('searchInput');
+    if (searchEl) searchEl.addEventListener('input', renderTable);
+    const filterEl = document.getElementById('filterStatus');
+    if (filterEl) filterEl.addEventListener('change', renderTable);
+
+    async function initAdminPanel() {
+      await loadConfig();
+      if (!autoRefreshTimer) {
+        autoRefreshTimer = setInterval(() => {
+          loadConfig();
+        }, 10000);
+      }
+    }
+
+    initAdminPanel();
+  </script>
+</body>
+</html>
